@@ -27,7 +27,7 @@ class HydroponicSystemFactory(DjangoModelFactory):
     class Meta:
         model = HydroponicSystem
 
-    user = SubFactory(UserFactory)
+    owner = SubFactory(UserFactory)
     name = Sequence(lambda n: f"name_{n}")
 
 
