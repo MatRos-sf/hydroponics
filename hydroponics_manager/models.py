@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -20,12 +21,12 @@ class Measurement(models.Model):
     ph = models.FloatField(
         blank=True,
         null=True,
-        validators=[MinValueValidator(0.0), MaxValueValidator(14)],
+        validators=[MinValueValidator(0.0), MaxValueValidator(14.0)],
     )
     water_temperature = models.FloatField(
         blank=True,
         null=True,
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
         help_text="Water temperature is measured in degrees Celsius",
     )
     tds = models.FloatField(
@@ -34,3 +35,14 @@ class Measurement(models.Model):
     hydroponic_system = models.ForeignKey(
         HydroponicSystem, on_delete=models.CASCADE, related_name="measurements"
     )
+
+    def save(self, *args, **kwargs):
+        if self.ph and not (0 <= self.ph <= 14):
+            raise ValidationError({"ph": "pH value must be between 0 and 14"})
+
+        if self.water_temperature and not (0 <= self.water_temperature <= 100):
+            raise ValidationError(
+                {"water_temperature": "The water temperature must be between 0 and 100"}
+            )
+
+        super(Measurement, self).save()
