@@ -4,6 +4,8 @@
         - HydroponicSystem model
         - Measurement model
 """
+from random import uniform
+
 from django.contrib.auth.models import User
 from factory import PostGenerationMethodCall, Sequence, SubFactory
 from factory.django import DjangoModelFactory
@@ -36,3 +38,13 @@ class MeasurementFactory(DjangoModelFactory):
         model = Measurement
 
     hydroponic_system = SubFactory(HydroponicSystemFactory)
+
+
+class ExtendedMeasurementFactory(MeasurementFactory):
+    class Meta:
+        model = Measurement
+
+    hydroponic_system = SubFactory(HydroponicSystemFactory)
+    ph = round(uniform(0, 14), 1)
+    water_temperature = round(uniform(0, 100), 2)
+    tds = round(uniform(0, 100), 2)

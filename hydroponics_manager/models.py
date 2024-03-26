@@ -34,7 +34,7 @@ class HydroponicSystem(models.Model):
 
     water_capacity = models.FloatField(blank=True, null=True)
 
-    # I can add fields for example: water_refill_interval, nutrient_refill_interval, pump_runtime_daily
+    # I could add fields for example: water_refill_interval, nutrient_refill_interval, pump_runtime_daily
     def get_absolute_url(self):
         from django.urls import reverse
 
@@ -60,6 +60,9 @@ class Measurement(models.Model):
     hydroponic_system = models.ForeignKey(
         HydroponicSystem, on_delete=models.CASCADE, related_name="measurements"
     )
+
+    class Meta:
+        ordering = ["-timestamp"]
 
     def save(self, *args, **kwargs):
         if self.ph and not (0 <= self.ph <= 14):
