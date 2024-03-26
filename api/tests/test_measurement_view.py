@@ -9,7 +9,7 @@ from hydroponics_manager.factories import HydroponicSystemFactory, UserFactory
 from hydroponics_manager.models import HydroponicSystem, Measurement
 
 
-@tag("api")
+@tag("api_sensor")
 class SensorTests(APITestCase):
     """
     Tests simulate a sensor by sending POST requests to the API View
