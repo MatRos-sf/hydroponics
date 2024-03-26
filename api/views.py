@@ -32,7 +32,6 @@ class MeasurementListAPIView(ListAPIView):
         )[:10]
 
     def list(self, request, *args, **kwargs) -> Response:
-        super(MeasurementListAPIView, self).list(request, *args, **kwargs)
         queryset = self.get_queryset()
         serializer = self.serializer_class(queryset, many=True)
 
