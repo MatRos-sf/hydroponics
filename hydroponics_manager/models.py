@@ -61,6 +61,9 @@ class Measurement(models.Model):
         HydroponicSystem, on_delete=models.CASCADE, related_name="measurements"
     )
 
+    class Meta:
+        ordering = ["-timestamp"]
+
     def save(self, *args, **kwargs):
         if self.ph and not (0 <= self.ph <= 14):
             raise ValidationError({"ph": "pH value must be between 0 and 14"})
