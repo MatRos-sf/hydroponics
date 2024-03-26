@@ -107,4 +107,4 @@ class MeasurementListAPIViewTest(APITestCase):
         self.client.login(username=self.user.username, password=PASSWORD)
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(len(response.json()), 10)
+        self.assertEqual(len(response.json()["data"]), 10)
