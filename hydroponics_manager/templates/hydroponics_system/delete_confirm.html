@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <form method="post">
+            {% csrf_token %}
+            <h1>Do you want delete object: {{ object.name }}</h1>
+            <a class="btn" href="{% url 'hydroponic_system:detail' object.pk %}">No</a>
+            <button type="submit">Yes</button>
+        </form>
+    </body>
+</html>

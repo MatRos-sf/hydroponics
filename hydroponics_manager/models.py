@@ -4,20 +4,45 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
+class HydroponicsType(models.TextChoices):
+    # https://www.wiki.haszysz.com/index.php/Rodzaje_system%C3%B3w_hydroponicznych
+    AEROPONIC = "AEROPONIC", "Aeroponic Systems"
+    DRIPPER_FEED = "DRIPPER_FEED", "Dripper Feed Systems"
+    EBB_AND_FLOOD = "EBB_AND_FLOOD", "Ebb & Flood System"
+    NFT = "NFT", "Nutrient Film Technique"
+    POT = "POT", "POT CULTURE"
+
+
 class HydroponicSystem(models.Model):
     """
     Model presents hydroponic system
     """
 
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="systems")
+
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True, null=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="systems")
+    location = models.CharField(max_length=200, blank=True, null=True)
+    system_type = models.CharField(
+        max_length=50,
+        choices=HydroponicsType.choices,
+        help_text="Type of hydroponic system",
+    )
+
     created = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
+    water_capacity = models.FloatField(blank=True, null=True)
+
+    # I can add fields for example: water_refill_interval, nutrient_refill_interval, pump_runtime_daily
+    def get_absolute_url(self):
+        from django.urls import reverse
+
+        return reverse("hydroponic_system:detail", kwargs={"pk": self.pk})
+
 
 class Measurement(models.Model):
-    measurement_date = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     ph = models.FloatField(
         blank=True,
         null=True,
