@@ -17,3 +17,14 @@ class HydroponicSystemListAPIView(ListAPIView):
 
     def get_queryset(self):
         return HydroponicSystem.objects.filter(owner=self.request.user)
+
+
+class MeasurementListAPIView(ListAPIView):
+    serializer_class = MeasurementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Measurement.objects.filter(
+            hydroponic_system__pk=self.kwargs.get("pk"),
+            hydroponic_system__owner=self.request.user,
+        )[:10]

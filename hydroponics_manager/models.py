@@ -34,7 +34,7 @@ class HydroponicSystem(models.Model):
 
     water_capacity = models.FloatField(blank=True, null=True)
 
-    # I can add fields for example: water_refill_interval, nutrient_refill_interval, pump_runtime_daily
+    # I could add fields for example: water_refill_interval, nutrient_refill_interval, pump_runtime_daily
     def get_absolute_url(self):
         from django.urls import reverse
 
