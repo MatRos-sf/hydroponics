@@ -17,7 +17,7 @@ class HydroponicSystemListAPIView(ListAPIView):
     serializer_class = HydroponicSystemSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return HydroponicSystem.objects.filter(owner=self.request.user)
 
 
