@@ -1,5 +1,9 @@
 from django.db.models import QuerySet
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    ListAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -39,3 +43,14 @@ class MeasurementListAPIView(ListAPIView):
         response_data = {"name": hs.name, "data": serializer.data}
 
         return Response(response_data)
+
+
+# CRUD HydroponicSystem
+class HydroponicSystemRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = HydroponicSystemSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self) -> QuerySet:
+        return HydroponicSystem.objects.filter(
+            pk=self.kwargs.get("pk"), owner=self.request.user
+        )

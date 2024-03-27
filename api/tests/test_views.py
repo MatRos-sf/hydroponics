@@ -1,20 +1,18 @@
+from functools import partial
 from http import HTTPStatus
-from random import uniform
 
 from django.contrib.auth.models import User
 from django.test import tag
 from django.urls import reverse
-from parameterized import parameterized
-from rest_framework.test import APIClient, APITestCase
+from rest_framework.test import APITestCase
 
 from hydroponics_manager.factories import (
     PASSWORD,
     ExtendedMeasurementFactory,
     HydroponicSystemFactory,
-    MeasurementFactory,
     UserFactory,
 )
-from hydroponics_manager.models import HydroponicSystem, Measurement
+from hydroponics_manager.models import HydroponicsType, HydroponicSystem, Measurement
 
 
 @tag("hs")
@@ -73,12 +71,6 @@ class MeasurementListAPIViewTest(APITestCase):
         for _ in range(5):
             ExtendedMeasurementFactory(hydroponic_system=list_of_hs[1])
 
-        # for index, hs in enumerate(list_of_hs):
-        #     if index == 0:
-        #         ExtendedMeasurementFactory.create_batch(15, hydroponic_system=hs)
-        #     else:
-        #         ExtendedMeasurementFactory.create_batch(5, hydroponic_system=hs)
-
         # second user
         second_user = users[-1]
         hs = HydroponicSystemFactory(owner=second_user)
@@ -125,3 +117,66 @@ class MeasurementListAPIViewTest(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(len(response.json()["data"]), hs_len)
+
+
+@tag("hs_crud")
+class HydroponicSystemRetrieveUpdateDestroyAPIViewTestCase(APITestCase):
+    @classmethod
+    def setUpClass(cls):
+        super(HydroponicSystemRetrieveUpdateDestroyAPIViewTestCase, cls).setUpClass()
+        user = UserFactory()
+        HydroponicSystemFactory(owner=user)
+
+    def setUp(self):
+        self.user = User.objects.first()
+        self.url = partial(reverse, "api:rud-hydroponic-system")
+
+    def test_should_delete_a_hydroponic_system(self):
+        hs = HydroponicSystem.objects.filter(owner=self.user)
+        hs_single_instance = hs.first()
+        amt_hs = hs.count()
+
+        self.client.login(username=self.user.username, password=PASSWORD)
+        self.client.delete(self.url(kwargs={"pk": hs_single_instance.pk}))
+
+        self.assertEqual(HydroponicSystem.objects.count(), amt_hs - 1)
+
+    def test_should_put_a_hydroponic_system(self):
+        hs = HydroponicSystem.objects.filter(owner=self.user)
+        hs_single_instance = hs.first()
+        payload = {
+            "name": "Test Hydroponic System",
+            "description": "test description",
+            "system_type": HydroponicsType.DRIPPER_FEED,
+        }
+
+        self.client.login(username=self.user.username, password=PASSWORD)
+        self.client.put(
+            self.url(kwargs={"pk": hs_single_instance.pk}), payload, format="json"
+        )
+
+        self.assertNotEquals(hs_single_instance.description, payload["description"])
+        self.assertNotEquals(hs_single_instance.name, payload["name"])
+
+    def test_should_get_a_hydroponic_system(self):
+        hs = HydroponicSystem.objects.filter(owner=self.user)
+        hs_single_instance = hs.first()
+
+        self.client.login(username=self.user.username, password=PASSWORD)
+        response = self.client.get(self.url(kwargs={"pk": hs_single_instance.pk}))
+
+        data = response.json()
+
+        self.assertEqual(hs_single_instance.name, data["name"])
+        self.assertEqual(hs_single_instance.description, data["description"])
+        self.assertEqual(hs_single_instance.location, data["location"])
+        self.assertEqual(hs_single_instance.system_type, data["system_type"])
+        self.assertEqual(hs_single_instance.is_active, data["is_active"])
+
+    def test_should_not_get_information_when_user_is_not_owner(self):
+        new_user = UserFactory()
+        hs = HydroponicSystem.objects.first()
+        self.client.login(username=new_user.username, password=PASSWORD)
+        response = self.client.get(self.url(kwargs={"pk": hs.pk}))
+
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
