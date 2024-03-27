@@ -34,23 +34,35 @@ Its main goals were to:
 
 <!-- GETTING STARTED -->
 ## Getting Started
+You can install this project in two different ways: using venv or using poetry.
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/MatRos-sf/hydroponics
+   git clone https://github.com/MatRos-sf/hydroponics .
    ```
-2. Create a virtual environment:
+2. Create a virtual environment and activate it:
    ```sh
    python3 -m venv venv
+   source venv/bin/activate
    ```
-   and active them.
 3. Install the required packages:
    ```sh
    pip install -r requirements.txt
    ```
 4. Build the `.env` file using the provided template in the `sample_env` file.
+   ```text
+   SECRET_KEY=...
+   DEBUG=TRUE
+   ALLOWED_HOSTS=*
 
-5. Execute the `migration` command:
+   #DATA
+   DB_NAME=...
+   DB_USER=...
+   DB_PASSWORD=...
+   DB_HOST=...
+   DB_PORT=...
+   ```
+5. Run the `migration` command:
     ```sh
     python3 manage.py migrate
     ```
@@ -58,6 +70,35 @@ Its main goals were to:
     ```sh
     python3 manage.py runserver
     ```
+### Installation with poetry
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/MatRos-sf/hydroponics .
+   ```
+2. Install:
+   ```sh
+   poetry install
+   ```
+
+3. Build the `.env` file using the provided template in the `sample_env` file.
+
+4. Execute the `migration` command:
+    ```sh
+    poetry run python3 manage.py migrate
+    ```
+5. Start the server:
+    ```sh
+    poetry run python3 manage.py runserver
+    ```
+
+## Scripts and tests
+<p>I've created a script to assist you in generating sample models, which you can use to test the application.</p>
+Additionally, there are 65 tests that cover 99% of my code. If you'd like to test this application, use:
+
+```shell
+  coverage run manage.py test
+  coverage html
+```
 
 
 
@@ -65,7 +106,9 @@ Its main goals were to:
 <!-- CONTACT -->
 ## Contact
 
-Mateusz Rosenkranz - mateuszrosenkranz@gmail.com
+#### Mateusz Rosenkranz
+* mateuszrosenkranz@gmail.com
+* www.linkedin.com/in/mat-ros
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
