@@ -79,7 +79,7 @@ Mateusz Rosenkranz - mateuszrosenkranz@gmail.com
 [Python-url]: https://www.python.org/
 [Requests]: https://img.shields.io/badge/Requests-2.26.0-008080?style=for-the-badge&logo=requests
 [Requests-url]: https://docs.python-requests.org/en/latest/
-[Django_Rest_Framework]: https://img.shields.io/badge/Django%20Rest%20Framework-3.14.0-03282C?style=for-the-badge&logo=django
+[Django_Rest_Framework]: https://img.shields.io/badge/Django%20Rest%20Framework-3.15.1-03282C?style=for-the-badge&logo=django
 [Django_Rest_Framework-url]: https://www.django-rest-framework.org/
 [Factory_Boy]: https://img.shields.io/badge/Factory%20Boy-3.2.0-FF69B4?style=for-the-badge&logo=python
 [Factory_Boy-url]: https://factoryboy.readthedocs.io/en/stable/
