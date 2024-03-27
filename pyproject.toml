@@ -7,3 +7,34 @@ line-length = 88
 ignore = [
     "F403"
 ]
+
+[tool.poetry]
+name = "luna-project"
+version = "0.1.0"
+description = ""
+authors = ["Mateusz Rosenkranz <mateuszrosenkranz@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "5.0.3"
+django-crispy-forms = "2.1"
+django-debug-toolbar = "4.3.0"
+django-extensions = "3.2.3"
+django-filter = "24.1"
+django-picklefield = "3.1"
+django-silk = "5.1.0"
+djangorestframework = "3.15.1"
+coverage = "7.4.4"
+crispy-bootstrap5 = "0.7"
+factory-boy = "3.3.0"
+Markdown = "3.6"
+pre-commit = "3.7.0"
+psycopg2-binary = "2.9.9"
+python-dotenv = "1.0.0"
+django-environ = "^0.11.2"
+parameterized = "^0.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
