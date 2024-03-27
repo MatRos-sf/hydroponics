@@ -22,13 +22,14 @@ class SensorTests(APITestCase):
 
     @parameterized.expand(
         [
-            ({"ph": 6, "water_temperature": 15, "tds": 10, "hydroponic_system": 1},),
-            ({"water_temperature": 15, "tds": 10, "hydroponic_system": 1},),
+            ({"ph": 6, "water_temperature": 15, "tds": 10},),
+            ({"water_temperature": 15, "tds": 10},),
             ({"tds": 10, "hydroponic_system": 1},),
-            ({"hydroponic_system": 1},),
+            ({},),
         ]
     )
     def test_should_send_and_create_measurement(self, data):
+        data["hydroponic_system"] = HydroponicSystem.objects.first().pk
         response = self.client.post(self.url, data, format="json")
 
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
