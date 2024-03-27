@@ -16,7 +16,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 This project serves as a simple Hydroponic Systems Manager. It was initially developed as part of an interview exercise for Luna Company.
-Its main goals were to::
+Its main goals were to:
 * Create models for hydroponic systems
 * Set up basic operations for managing hydroponic systems (CRUD)
 * Allow submitting measurements from sensors
@@ -61,6 +61,7 @@ Its main goals were to::
 
 
 
+
 <!-- CONTACT -->
 ## Contact
 
@@ -72,7 +73,7 @@ Mateusz Rosenkranz - mateuszrosenkranz@gmail.com
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[Django]: https://img.shields.io/badge/Django-4.2.7-092E20?style=for-the-badge&logo=django
+[Django]: https://img.shields.io/badge/Django-5.0.3-092E20?style=for-the-badge&logo=django
 [Django-url]: https://www.djangoproject.com/
 [Python]: https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python
 [Python-url]: https://www.python.org/
