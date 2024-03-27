@@ -1,13 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{{ object.name }}</title>
-    </head>
-    <body>
-        <h1>{{ object.name }}</h1>
-        <p>{{ object.description }}</p>
-        <a class="btn" href="{% url 'hydroponic_system:update' object.pk %}">Edit</a>
-        <a class="btn" href="{% url 'hydroponic_system:delete' object.pk %}">Delete</a>
-    </body>
-</html>
+{% extends "hydroponics_manager/base.html" %}
+{% block title %}{{ object.name }}{% endblock %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-5 mt-5 mb-3">
+            <h1>{{ object.name }}</h1>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-5">
+                <div class="row">
+                    <div class="col-6">
+                        <b>Name</b>
+                    </div>
+                    <div class="col-6 text-start">{{ object.name }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b>Description</b>
+                    </div>
+                    <div class="col-6 text-start">{{ object.description }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b>Location</b>
+                    </div>
+                    <div class="col-6 text-start">{{ object.location }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b>System Type</b>
+                    </div>
+                    <div class="col-6 text-start">{{ object.get_system_type_display }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b>Created</b>
+                    </div>
+                    <div class="col-6 text-start">{{ object.created }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b>PK</b>
+                    </div>
+                    <div class="col-6 text-start">{{ object.pk }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b>Active</b>
+                    </div>
+                    <div class="col-6 text-start">{{ object.is_active }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b>Water capacity</b>
+                    </div>
+                    <div class="col-6 text-start">{{ object.water_capacity }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-5 m-2">
+            <a class="btn btn-primary my-2"
+               href="{% url 'hydroponic_system:update' object.pk %}">Update</a>
+            <a class="btn btn-primary my-2"
+               href="{% url 'hydroponic_system:delete' object.pk %}">Delete</a>
+        </div>
+    </div>
+{% endblock %}
