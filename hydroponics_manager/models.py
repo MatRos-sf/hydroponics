@@ -37,7 +37,7 @@ class HydroponicSystem(models.Model):
     # I could add fields for example: water_refill_interval, nutrient_refill_interval, pump_runtime_daily
     class Meta:
         ordering = ("-created",)
-        unique_together = ("owner", "name")
+        # unique_together = ("owner", "name")
 
     def get_absolute_url(self):
         from django.urls import reverse

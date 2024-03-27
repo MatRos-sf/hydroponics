@@ -3,8 +3,12 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from parameterized import parameterized
 
-from .factories import HydroponicSystemFactory, MeasurementFactory, UserFactory
-from .models import HydroponicSystem, Measurement
+from hydroponics_manager.factories import (
+    HydroponicSystemFactory,
+    MeasurementFactory,
+    UserFactory,
+)
+from hydroponics_manager.models import HydroponicSystem, Measurement
 
 
 class FactoriesSimpleTest(TestCase):
