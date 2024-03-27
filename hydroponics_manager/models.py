@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import QuerySet
 
 
 class HydroponicsType(models.TextChoices):
@@ -44,7 +45,7 @@ class HydroponicSystem(models.Model):
 
         return reverse("hydroponic_system:detail", kwargs={"pk": self.pk})
 
-    def last_measurements(self):
+    def last_measurements(self) -> QuerySet:
         return self.measurements.all().values(
             "timestamp", "ph", "water_temperature", "tds"
         )[:10]
@@ -73,7 +74,7 @@ class Measurement(models.Model):
     class Meta:
         ordering = ["-timestamp"]
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if self.ph and not (0 <= self.ph <= 14):
             raise ValidationError({"ph": "pH value must be between 0 and 14"})
 

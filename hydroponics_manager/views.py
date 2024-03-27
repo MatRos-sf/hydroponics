@@ -2,7 +2,9 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import redirect, render
+from django.db.models import QuerySet
+from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -27,7 +29,9 @@ class SignUpView(SuccessMessageMixin, CreateView):
 
 
 class CustomLogoutView(View):
-    def get(self, request, *args, **kwargs):
+    def get(
+        self, request, *args, **kwargs
+    ) -> HttpResponseRedirect | HttpResponsePermanentRedirect:
         logout(request)
         return redirect("hydroponic_system:login")
 
@@ -39,7 +43,7 @@ class HydroponicSystemCreateView(LoginRequiredMixin, CreateView):
     form_class = HydroponicSystemForm
     extra_context = {"button_name": "Create"}
 
-    def form_valid(self, form):
+    def form_valid(self, form) -> HttpResponseRedirect:
         instance = form.save(commit=False)
         instance.owner = self.request.user
         instance.save()
@@ -47,7 +51,7 @@ class HydroponicSystemCreateView(LoginRequiredMixin, CreateView):
 
 
 class CustomPassesTestMixin(UserPassesTestMixin):
-    def test_func(self):
+    def test_func(self) -> bool:
         return HydroponicSystem.objects.filter(
             owner=self.request.user, pk=self.kwargs.get("pk")
         ).exists()
@@ -75,7 +79,7 @@ class HydroponicSystemListView(LoginRequiredMixin, ListView):
     model = HydroponicSystem
     template_name = "hydroponics_manager/list.html"
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return HydroponicSystem.objects.filter(owner=self.request.user).values(
             "pk", "name"
         )
