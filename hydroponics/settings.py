@@ -1,20 +1,18 @@
+import os
 from pathlib import Path
+
+from .env import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env.read_env(os.path.join(BASE_DIR, ".env"))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+SECRET_KEY = env("SECRET_KEY")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-f*$%!t#&y0*f)ybxxw*_poyx^o+%6x+8%1qp(cxf#q+mnaax)a"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -28,10 +26,19 @@ INSTALLED_APPS = [
     "rest_framework",
     "crispy_forms",
     "crispy_bootstrap5",
+    "django_extensions",
+]
+
+INSTALLED_EXTENSIONS = [
     "hydroponics_manager",
     "api",
 ]
 
+# if DEBUG:
+#     INSTALLED_APPS.append("silk")
+#     INSTALLED_APPS.append("debug_toolbar")
+
+INSTALLED_APPS += INSTALLED_EXTENSIONS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -42,6 +49,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# if DEBUG:
+# MIDDLEWARE.append("silk.middleware.SilkyMiddleware")
+# MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 ROOT_URLCONF = "hydroponics.urls"
 
@@ -67,12 +78,24 @@ WSGI_APPLICATION = "hydroponics.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if env("ENVIRONMENT") == "own":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": env("DB_NAME"),
+            "USER": env("DB_USER"),
+            "PASSWORD": env("DB_PASSWORD"),
+            "HOST": env("DB_HOST"),
+            "PORT": env("DB_PORT"),
+        }
+    }
 
 
 # Password validation
@@ -122,3 +145,10 @@ LOGOUT_REDIRECT_URL = "/login/"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+STATIC_URL = "/static/"
+SILKY_PYTHON_PROFILER = True
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

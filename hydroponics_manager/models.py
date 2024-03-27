@@ -44,6 +44,11 @@ class HydroponicSystem(models.Model):
 
         return reverse("hydroponic_system:detail", kwargs={"pk": self.pk})
 
+    def last_measurements(self):
+        return self.measurements.all().values(
+            "timestamp", "ph", "water_temperature", "tds"
+        )[:10]
+
 
 class Measurement(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)

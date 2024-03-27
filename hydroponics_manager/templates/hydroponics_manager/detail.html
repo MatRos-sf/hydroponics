@@ -66,4 +66,17 @@
                href="{% url 'hydroponic_system:delete' object.pk %}">Delete</a>
         </div>
     </div>
+    <div class="row justify-content-center my-3">
+        <h1>Last measurements:</h1>
+        {% for m in object.last_measurements %}
+            <div class="col-2 m-2">
+                {{ m.timestamp|date:"d M Y" }}
+                <ul class="list-group">
+                    <li class="list-group-item">pH: {{ m.ph }}</li>
+                    <li class="list-group-item">Water Temperature: {{ m.water_temperature }}</li>
+                    <li class="list-group-item">TDS: {{ m.tds }}</li>
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

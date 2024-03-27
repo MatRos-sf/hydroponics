@@ -76,4 +76,6 @@ class HydroponicSystemListView(LoginRequiredMixin, ListView):
     template_name = "hydroponics_manager/list.html"
 
     def get_queryset(self):
-        return HydroponicSystem.objects.filter(owner=self.request.user)
+        return HydroponicSystem.objects.filter(owner=self.request.user).values(
+            "pk", "name"
+        )
