@@ -7,7 +7,7 @@
 from random import uniform
 
 from django.contrib.auth.models import User
-from factory import PostGenerationMethodCall, Sequence, SubFactory
+from factory import PostGenerationMethodCall, Sequence, SubFactory, post_generation
 from factory.django import DjangoModelFactory
 from faker import Faker
 
