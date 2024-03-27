@@ -67,11 +67,17 @@ class MeasurementListAPIViewTest(APITestCase):
         # first user -> 2hs, 20 random measurement
         first_user = users[0]
         list_of_hs = HydroponicSystemFactory.create_batch(2, owner=first_user)
-        for index, hs in enumerate(list_of_hs):
-            if index == 0:
-                ExtendedMeasurementFactory.create_batch(15, hydroponic_system=hs)
-            else:
-                ExtendedMeasurementFactory.create_batch(5, hydroponic_system=hs)
+        for _ in range(15):
+            ExtendedMeasurementFactory(hydroponic_system=list_of_hs[0])
+
+        for _ in range(5):
+            ExtendedMeasurementFactory(hydroponic_system=list_of_hs[1])
+
+        # for index, hs in enumerate(list_of_hs):
+        #     if index == 0:
+        #         ExtendedMeasurementFactory.create_batch(15, hydroponic_system=hs)
+        #     else:
+        #         ExtendedMeasurementFactory.create_batch(5, hydroponic_system=hs)
 
         # second user
         second_user = users[-1]
@@ -85,10 +91,10 @@ class MeasurementListAPIViewTest(APITestCase):
     def test_should_create_20_measurement_for_main_user(self):
         hs_first, hs_second = HydroponicSystem.objects.filter(owner=self.user)
         self.assertEqual(
-            Measurement.objects.filter(hydroponic_system=hs_first).count(), 15
+            Measurement.objects.filter(hydroponic_system=hs_first).count(), 5
         )
         self.assertEqual(
-            Measurement.objects.filter(hydroponic_system=hs_second).count(), 5
+            Measurement.objects.filter(hydroponic_system=hs_second).count(), 15
         )
 
     def test_should_return_status_code_forbidden_when_user_did_not_provide_credentials(
@@ -100,11 +106,22 @@ class MeasurementListAPIViewTest(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
-    def test_should_return_ten_last_measurement(self):
-        hs = HydroponicSystem.objects.filter(owner=self.user).first()
-        url = reverse("api:measurement-list", kwargs={"pk": hs.pk})
+    def test_should_return_appropriate__measurements(self):
+        hs = HydroponicSystem.objects.filter(owner=self.user).all()
+        hs_len = 10 if hs[0].measurements.count() > 10 else hs[0].measurements.count()
+
+        url = reverse("api:measurement-list", kwargs={"pk": hs[0].pk})
 
         self.client.login(username=self.user.username, password=PASSWORD)
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(len(response.json()["data"]), 10)
+        self.assertEqual(len(response.json()["data"]), hs_len)
+
+        hs_len = 10 if hs[1].measurements.count() > 10 else hs[1].measurements.count()
+
+        url = reverse("api:measurement-list", kwargs={"pk": hs[1].pk})
+
+        self.client.login(username=self.user.username, password=PASSWORD)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(len(response.json()["data"]), hs_len)
