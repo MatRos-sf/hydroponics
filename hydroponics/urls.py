@@ -6,3 +6,5 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("", include("hydroponics_manager.urls")),
 ]
+
+urlpatterns += [path("silk/", include("silk.urls", namespace="silk"))]
