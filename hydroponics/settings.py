@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "hydroponics_manager",
     "api",
     "silk",
+    "debug_toolbar",
 ]
 
 
@@ -43,6 +44,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "silk.middleware.SilkyMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "hydroponics.urls"
@@ -124,3 +126,10 @@ LOGOUT_REDIRECT_URL = "/login/"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+STATIC_URL = "/static/"
+SILKY_PYTHON_PROFILER = True
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
