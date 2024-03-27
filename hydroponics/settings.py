@@ -1,20 +1,18 @@
+import os
 from pathlib import Path
+
+from .env import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env.read_env(os.path.join(BASE_DIR, ".env"))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+SECRET_KEY = env("SECRET_KEY")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-f*$%!t#&y0*f)ybxxw*_poyx^o+%6x+8%1qp(cxf#q+mnaax)a"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -28,12 +26,18 @@ INSTALLED_APPS = [
     "rest_framework",
     "crispy_forms",
     "crispy_bootstrap5",
-    "hydroponics_manager",
-    "api",
-    "silk",
-    "debug_toolbar",
 ]
 
+INSTALLED_EXTENSIONS = [
+    "hydroponics_manager",
+    "api",
+]
+
+# if DEBUG:
+#     INSTALLED_APPS.append("silk")
+#     INSTALLED_APPS.append("debug_toolbar")
+
+INSTALLED_APPS += INSTALLED_EXTENSIONS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -43,9 +47,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "silk.middleware.SilkyMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+# if DEBUG:
+# MIDDLEWARE.append("silk.middleware.SilkyMiddleware")
+# MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 ROOT_URLCONF = "hydroponics.urls"
 
