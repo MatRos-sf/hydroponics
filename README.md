@@ -91,6 +91,10 @@ You can install this project in two different ways: using venv or using poetry.
     poetry run python3 manage.py runserver
     ```
 
+## API documentation
+To access the app documentation, visit ```http://127.0.0.1:8000/api/swagger/``` or refer to the provided screenshot:
+![Zrzut ekranu z 2024-03-27 22-48-08](https://github.com/MatRos-sf/hydroponics/assets/59665130/e2e012c8-8e52-4fd8-a824-61dbebc6e3c4)
+
 ## Scripts and tests
 <p>I've created a script to assist you in generating sample models, which you can use to test the application.</p>
 Additionally, there are 65 tests that cover 99% of my code. If you'd like to test this application, use:
